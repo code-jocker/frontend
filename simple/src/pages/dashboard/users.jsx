@@ -1,10 +1,10 @@
 import Sidebar from "../../components/Sidebar"
 
 const users = [
-    { name: "Alice Johnson", email: "alice@example.com", role: "Admin", joined: "May 2023" },
-    { name: "Bob Smith", email: "bob@example.com", role: "Customer", joined: "Jul 2023" },
-    { name: "Carol White", email: "carol@example.com", role: "Seller", joined: "Sep 2023" },
-    { name: "David Lee", email: "david@example.com", role: "Customer", joined: "Jan 2024" },
+    { name: "", email: "", role: "Admin", joined: "May 2023" },
+    { name: "", email: "bob@example.com", role: "Customer", joined: "Jul 2023" },
+    { name: "", email: "carol@example.com", role: "Seller", joined: "Sep 2023" },
+    { name: "", email: "", role: "Customer", joined: "Jan 2024" },
 ]
 
 const roleBadge = {
