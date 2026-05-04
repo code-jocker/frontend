@@ -2,10 +2,11 @@ import { useEffect, useState } from "react"
 import Sidebar from "../../components/Sidebar"
 import intergrate from "../../api/axios"
 
-const emptyForm = { name: "", size: "", price: "", type: "unisex", description: "", status: "available" }
+const emptyForm = { name: "", size: "", price: "", type: "unisex", description: "", status: "available", shopName: "" }
 
 export default function Products() {
     const [products, setProducts] = useState([])
+    const [shops, setShops] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
     const [showModal, setShowModal] = useState(false)
@@ -16,6 +17,15 @@ export default function Products() {
 
     const token = localStorage.getItem("token")
     const headers = { Authorization: `Bearer ${token}` }
+
+    const fetchShops = async () => {
+        try {
+            const res = await intergrate.get("/shops/getAllShops", { headers })
+            setShops(res.data)
+        } catch (err) {
+            console.error("Failed to fetch shops:", err)
+        }
+    }
 
     const fetchProducts = async () => {
         try {
@@ -32,11 +42,27 @@ export default function Products() {
         }
     }
 
-    useEffect(() => { fetchProducts() }, [])
+    useEffect(() => { 
+        fetchProducts()
+        fetchShops()
+    }, [])
 
     const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
     const openCreate = () => { setEditProduct(null); setForm(emptyForm); setShowModal(true) }
-    const openEdit = (p) => { setEditProduct(p); setForm({ name: p.name, size: p.size, price: p.price, type: p.type, description: p.description || "", status: p.status }); setShowModal(true) }
+    const openEdit = (p) => { 
+        setEditProduct(p); 
+        setForm({ 
+            name: p.name, 
+            size: p.size, 
+            price: p.price, 
+            type: p.type, 
+            description: p.description || "", 
+            status: p.status,
+            shopName: p.shop?.name || "",
+            shopId: p.shopId || ""
+        }); 
+        setShowModal(true) 
+    }
     const closeModal = () => { setShowModal(false); setEditProduct(null); setForm(emptyForm) }
 
     const handleSubmit = async (e) => {
@@ -88,6 +114,7 @@ export default function Products() {
                             <div className="flex-1">
                                 <p className="text-sm font-semibold text-slate-800 dark:text-white">{p.name}</p>
                                 <p className="text-xs text-slate-400">{p.type} · Size: {p.size}</p>
+                                {p.shop?.name && <p className="text-xs text-slate-500 mt-1">🏪 {p.shop.name}</p>}
                             </div>
                             <span className="text-blue-900 dark:text-blue-400 font-bold text-sm">${p.price}</span>
                             <div className="flex flex-col gap-1">
@@ -116,6 +143,15 @@ export default function Products() {
                                         className="w-full border border-slate-200 rounded px-3 py-2 text-sm outline-none focus:border-indigo-400" />
                                 </div>
                             ))}
+                            <div>
+                                <label className="block text-xs font-medium text-slate-600 mb-1">Shop</label>
+                                <select name="shopName" value={form.shopName} onChange={handleChange} className="w-full border border-slate-200 rounded px-3 py-2 text-sm outline-none focus:border-indigo-400">
+                                    <option value="">Select shop</option>
+                                    {shops.map(s => (
+                                        <option key={s.id} value={s.name}>{s.name}</option>
+                                    ))}
+                                </select>
+                            </div>
                             <div>
                                 <label className="block text-xs font-medium text-slate-600 mb-1">Type</label>
                                 <select name="type" value={form.type} onChange={handleChange} className="w-full border border-slate-200 rounded px-3 py-2 text-sm outline-none focus:border-indigo-400">

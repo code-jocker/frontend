@@ -70,7 +70,10 @@ export default function Notifications() {
     return (
         <Sidebar>
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-slate-800 dark:text-white">Notifications</h2>
+                <div>
+                    <h2 className="text-xl font-bold text-slate-800 dark:text-white">Notifications</h2>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{notifications.length} total notification{notifications.length !== 1 ? 's' : ''}</p>
+                </div>
                 <button onClick={openCreate} className="bg-indigo-500 text-white px-4 py-2 rounded text-sm font-semibold hover:bg-indigo-600 transition">+ Add Notification</button>
             </div>
 
