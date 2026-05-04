@@ -6,7 +6,7 @@ const stats = [
     { label: "Total Orders", value: "0", icon: "🛒" },
     { label: "Products", value: "0", icon: "📦" },
     { label: "Users", value: "0", icon: "👥" },
-    { label: "Revenue", value: "$0", icon: "r" },
+    { label: "Revenue", value: "$0", icon: "" },
 ]
 
 export default function Dashboard() {

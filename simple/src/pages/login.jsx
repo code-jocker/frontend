@@ -51,7 +51,10 @@ export default function Login() {
                 </div>
 
                 <div className="mb-6">
-                    <label className="block text-sm font-medium text-slate-600 mb-1">Password</label>
+                    <div className="flex justify-between items-center mb-1">
+                        <label className="block text-sm font-medium text-slate-600">Password</label>
+                        <Link to="/forgot-password" className="text-xs text-indigo-500 hover:underline">Forgot?</Link>
+                    </div>
                     <input
                      type="password" placeholder="••••••••" value={form.password} onChange={handleChange}
                      name="password"
