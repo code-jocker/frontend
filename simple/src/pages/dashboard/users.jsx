@@ -72,14 +72,22 @@ export default function Users() {
             setDeleteConfirm(null)
             await fetchUsers()
         } catch (err) {
-            setError(err.response?.data?.message || "Delete failed")
+            console.error("Delete error:", err.response?.data)
+            const msg = err.response?.data?.message || err.response?.data?.error || "Delete failed"
+            
+            if (msg.includes("foreign key constraint")) {
+                setError("Cannot delete user: User has related records (notifications, orders, etc). Delete those first or contact admin.")
+            } else {
+                setError(`Delete failed: ${msg}`)
+            }
+            setDeleteConfirm(null)
         }
     }
 
     return (
         <Sidebar>
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-slate-800">Users</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white">Users</h2>
                 <button onClick={openCreate} className="bg-indigo-500 text-white px-4 py-2 rounded text-sm font-semibold hover:bg-indigo-600 transition">
                     + Add User
                 </button>
@@ -87,9 +95,9 @@ export default function Users() {
 
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-lg shadow-sm overflow-hidden">
                 <table className="w-full text-sm">
-                    <thead className="bg-slate-50 text-slate-400 text-xs uppercase">
+                    <thead className="bg-slate-50 dark:bg-slate-800 text-slate-400 text-xs uppercase">
                         <tr>
                             <th className="px-5 py-3 text-left">Name</th>
                             <th className="px-5 py-3 text-left">Email</th>
@@ -100,19 +108,19 @@ export default function Users() {
                             <th className="px-5 py-3 text-left">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                         {loading ? (
                             <tr><td colSpan={7} className="px-5 py-8 text-center text-slate-400">Loading...</td></tr>
                         ) : users.length === 0 ? (
                             <tr><td colSpan={7} className="px-5 py-8 text-center text-slate-400">No users found</td></tr>
                         ) : users.map(u => (
-                            <tr key={u.id} className="hover:bg-slate-50">
+                            <tr key={u.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
                                 <td className="px-5 py-3">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-500 flex items-center justify-center font-bold text-xs">
                                             {u.fullname?.[0]?.toUpperCase()}
                                         </div>
-                                        <span className="font-medium text-slate-800">{u.fullname}</span>
+                                        <span className="font-medium text-slate-800 dark:text-white">{u.fullname}</span>
                                     </div>
                                 </td>
                                 <td className="px-5 py-3 text-slate-400">{u.email}</td>

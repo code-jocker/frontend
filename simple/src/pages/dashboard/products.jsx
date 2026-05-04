@@ -70,26 +70,26 @@ export default function Products() {
     return (
         <Sidebar>
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-slate-800">Products</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white">Products</h2>
                 <button onClick={openCreate} className="bg-blue-900 text-white text-sm px-4 py-2 rounded hover:bg-blue-800">+ Add Product</button>
             </div>
 
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
             {loading ? (
-                <div className="bg-white rounded-lg shadow-sm p-10 text-center text-slate-400">Loading...</div>
+                <div className="bg-white dark:bg-slate-900 rounded-lg shadow-sm p-10 text-center text-slate-400">Loading...</div>
             ) : products.length === 0 ? (
-                <div className="bg-white rounded-lg shadow-sm p-10 text-center text-slate-400">No products yet</div>
+                <div className="bg-white dark:bg-slate-900 rounded-lg shadow-sm p-10 text-center text-slate-400">No products yet</div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {products.map(p => (
-                        <div key={p.id} className="bg-white rounded-lg p-4 shadow-sm flex items-center gap-4">
+                        <div key={p.id} className="bg-white dark:bg-slate-900 rounded-lg p-4 shadow-sm flex items-center gap-4">
                             <div className="w-10 h-10 bg-blue-100 text-blue-900 rounded-lg flex items-center justify-center text-lg">📦</div>
                             <div className="flex-1">
-                                <p className="text-sm font-semibold text-slate-800">{p.name}</p>
+                                <p className="text-sm font-semibold text-slate-800 dark:text-white">{p.name}</p>
                                 <p className="text-xs text-slate-400">{p.type} · Size: {p.size}</p>
                             </div>
-                            <span className="text-blue-900 font-bold text-sm">${p.price}</span>
+                            <span className="text-blue-900 dark:text-blue-400 font-bold text-sm">${p.price}</span>
                             <div className="flex flex-col gap-1">
                                 <button onClick={() => openEdit(p)} className="text-xs px-2 py-1 rounded bg-indigo-50 text-indigo-600 hover:bg-indigo-100 font-medium">Edit</button>
                                 <button onClick={() => setDeleteConfirm(p)} className="text-xs px-2 py-1 rounded bg-red-50 text-red-500 hover:bg-red-100 font-medium">Delete</button>

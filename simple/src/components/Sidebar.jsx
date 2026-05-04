@@ -1,5 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom"
 import { useTheme } from "../context/ThemeContext"
+import { useEffect, useState } from "react"
+import intergrate from "../api/axios"
 
 const links = [
     {label: "Users", path: "/dashboard/users"},
@@ -17,6 +19,25 @@ const ActiveLinks=({isActive})=>isActive? `bg-slate-700 text-white px-4 py-2 rou
 export default function Sidebar({ children }){
     const navigate = useNavigate()
     const { theme, toggleTheme } = useTheme()
+    const [unreadCount, setUnreadCount] = useState(0)
+    
+    const token = localStorage.getItem("token")
+    const headers = { Authorization: `Bearer ${token}` }
+
+    useEffect(() => {
+        const fetchUnread = async () => {
+            try {
+                const res = await intergrate.get("/notifications/my", { headers })
+                const unread = res.data.filter(n => !n.isRead).length
+                setUnreadCount(unread)
+            } catch (err) {
+                console.error("Failed to fetch notifications:", err)
+            }
+        }
+        if (token) fetchUnread()
+        const interval = setInterval(fetchUnread, 30000)
+        return () => clearInterval(interval)
+    }, [])
     
     const handleLogout = () => {
         localStorage.removeItem("token")
@@ -38,22 +59,31 @@ export default function Sidebar({ children }){
                 </nav>
                 <div className="flex flex-col py-2 px-3 border-t border-slate-700">
                     {bottomLinks.map(link => (
-                        <NavLink key={link.path} to={link.path} className={ActiveLinks}>
+                        <NavLink key={link.path} to={link.path} className={({isActive}) => `${ActiveLinks({isActive})} relative`}>
                             {link.label}
+                            {link.label === "Notifications" && unreadCount > 0 && (
+                                <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                    {unreadCount}
+                                </span>
+                            )}
                         </NavLink>
                     ))}
                 </div>
             </aside>
-            <main className="flex-1 bg-slate-100 dark:bg-slate-800 flex flex-col">
-                <header className="bg-white dark:bg-slate-900 shadow-sm px-8 py-3 flex justify-between items-center">
+            <main className="flex-1 bg-slate-100 dark:bg-slate-800 flex flex-col transition-colors">
+                <header className="bg-white dark:bg-slate-900 shadow-sm px-8 py-3 flex justify-between items-center transition-colors">
                     <h1 className="text-lg font-semibold text-slate-800 dark:text-white">Dashboard</h1>
                     <div className="flex items-center gap-4">
-                        <button className="relative p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">
+                        <NavLink to="/dashboard/notifications" className="relative p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
-                            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                        </button>
+                            {unreadCount > 0 && (
+                                <span className="absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                                    {unreadCount}
+                                </span>
+                            )}
+                        </NavLink>
                         <button className="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -73,7 +103,7 @@ export default function Sidebar({ children }){
                         <button onClick={handleLogout} className="text-sm text-red-500 font-semibold hover:text-red-600 transition">Logout</button>
                     </div>
                 </header>
-                <div className="p-8 flex-1 dark:text-white">{children}</div>
+                <div className="p-8 flex-1 dark:text-white transition-colors">{children}</div>
             </main>
         </div>
     )

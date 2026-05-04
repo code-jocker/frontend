@@ -77,15 +77,15 @@ export default function Orders() {
     return (
         <Sidebar>
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-slate-800">Orders</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white">Orders</h2>
                 <button onClick={openCreate} className="bg-indigo-500 text-white px-4 py-2 rounded text-sm font-semibold hover:bg-indigo-600 transition">+ Add Order</button>
             </div>
 
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-lg shadow-sm overflow-hidden">
                 <table className="w-full text-sm">
-                    <thead className="bg-slate-50 text-slate-400 text-xs uppercase">
+                    <thead className="bg-slate-50 dark:bg-slate-800 text-slate-400 text-xs uppercase">
                         <tr>
                             <th className="px-5 py-3 text-left">Order ID</th>
                             <th className="px-5 py-3 text-left">Customer</th>
@@ -95,14 +95,14 @@ export default function Orders() {
                             <th className="px-5 py-3 text-left">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                         {loading ? (
                             <tr><td colSpan={6} className="px-5 py-8 text-center text-slate-400">Loading...</td></tr>
                         ) : orders.length === 0 ? (
                             <tr><td colSpan={6} className="px-5 py-8 text-center text-slate-400">No orders yet</td></tr>
                         ) : orders.map(o => (
-                            <tr key={o.id} className="hover:bg-slate-50">
-                                <td className="px-5 py-3 font-semibold text-slate-800">#{o.id}</td>
+                            <tr key={o.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
+                                <td className="px-5 py-3 font-semibold text-slate-800 dark:text-white">#{o.id}</td>
                                 <td className="px-5 py-3 text-slate-600">{o.customer}</td>
                                 <td className="px-5 py-3 text-slate-400">{new Date(o.createdAt).toLocaleDateString()}</td>
                                 <td className="px-5 py-3 text-blue-900 font-bold">{o.total}</td>

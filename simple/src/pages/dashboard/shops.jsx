@@ -70,15 +70,15 @@ export default function Shop() {
     return (
         <Sidebar>
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-slate-800">Shops</h2>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white">Shops</h2>
                 <button onClick={openCreate} className="bg-blue-900 text-white text-sm px-4 py-2 rounded hover:bg-blue-800">+ Add Shop</button>
             </div>
 
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-lg shadow-sm overflow-hidden">
                 <table className="w-full text-sm">
-                    <thead className="bg-slate-50 text-slate-400 text-xs uppercase">
+                    <thead className="bg-slate-50 dark:bg-slate-800 text-slate-400 text-xs uppercase">
                         <tr>
                             <th className="px-5 py-3 text-left">Shop</th>
                             <th className="px-5 py-3 text-left">Contact</th>
@@ -87,14 +87,14 @@ export default function Shop() {
                             <th className="px-5 py-3 text-left">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                         {loading ? (
                             <tr><td colSpan={5} className="px-5 py-8 text-center text-slate-400">Loading...</td></tr>
                         ) : shops.length === 0 ? (
                             <tr><td colSpan={5} className="px-5 py-8 text-center text-slate-400">No shops yet</td></tr>
                         ) : shops.map(s => (
-                            <tr key={s.id} className="hover:bg-slate-50">
-                                <td className="px-5 py-3 font-medium text-slate-800">{s.name}</td>
+                            <tr key={s.id} className="hover:bg-slate-50 dark:hover:bg-slate-800">
+                                <td className="px-5 py-3 font-medium text-slate-800 dark:text-white">{s.name}</td>
                                 <td className="px-5 py-3 text-slate-400">{s.contact}</td>
                                 <td className="px-5 py-3 text-slate-400">{s.description}</td>
                                 <td className="px-5 py-3">

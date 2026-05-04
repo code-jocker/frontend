@@ -1,6 +1,3 @@
 @import "tailwindcss";
 
-@theme {
-  --color-dark-bg: #1e293b;
-  --color-dark-surface: #0f172a;
-}
+@config "./tailwind.config.js";
